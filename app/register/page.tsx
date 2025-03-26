@@ -88,14 +88,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+    <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-12 overflow-y-auto">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px] p-6 bg-zinc-900 rounded-lg border border-zinc-800 shadow-xl">
         <div className="flex flex-col space-y-2 text-center">
           <div className="flex justify-center">
             <Sword className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">新規アカウント登録</h1>
-          <p className="text-sm text-muted-foreground">必要事項を入力して、SHOGUN TRADEを始めましょう</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">新規アカウント登録</h1>
+          <p className="text-sm text-zinc-400">必要事項を入力して、SHOGUN TRADEを始めましょう</p>
         </div>
 
         <Form {...form}>
@@ -105,9 +105,9 @@ export default function RegisterPage() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>お名前（カタカナ）</FormLabel>
+                  <FormLabel className="text-zinc-300">お名前（カタカナ）</FormLabel>
                   <FormControl>
-                    <Input placeholder="ヤマダ タロウ" {...field} />
+                    <Input placeholder="ヤマダ タロウ" {...field} className="bg-zinc-800 border-zinc-700 text-white" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,11 +119,11 @@ export default function RegisterPage() {
               name="userId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ユーザーID</FormLabel>
+                  <FormLabel className="text-zinc-300">ユーザーID</FormLabel>
                   <FormControl>
-                    <Input placeholder="user123" {...field} />
+                    <Input placeholder="user123" {...field} className="bg-zinc-800 border-zinc-700 text-white" />
                   </FormControl>
-                  <FormDescription>半角英数字6文字以上</FormDescription>
+                  <FormDescription className="text-zinc-500">半角英数字6文字以上</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -134,9 +134,14 @@ export default function RegisterPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>メールアドレス</FormLabel>
+                  <FormLabel className="text-zinc-300">メールアドレス</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="example@example.com" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="example@example.com"
+                      {...field}
+                      className="bg-zinc-800 border-zinc-700 text-white"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -148,11 +153,16 @@ export default function RegisterPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>パスワード</FormLabel>
+                  <FormLabel className="text-zinc-300">パスワード</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      {...field}
+                      className="bg-zinc-800 border-zinc-700 text-white"
+                    />
                   </FormControl>
-                  <FormDescription>8文字以上</FormDescription>
+                  <FormDescription className="text-zinc-500">8文字以上</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -163,11 +173,11 @@ export default function RegisterPage() {
               name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>電話番号</FormLabel>
+                  <FormLabel className="text-zinc-300">電話番号</FormLabel>
                   <FormControl>
-                    <Input placeholder="09012345678" {...field} />
+                    <Input placeholder="09012345678" {...field} className="bg-zinc-800 border-zinc-700 text-white" />
                   </FormControl>
-                  <FormDescription>ハイフンなし</FormDescription>
+                  <FormDescription className="text-zinc-500">ハイフンなし</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -178,9 +188,13 @@ export default function RegisterPage() {
               name="referrerId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>紹介者ID</FormLabel>
+                  <FormLabel className="text-zinc-300">紹介者ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="紹介者のユーザーID" {...field} />
+                    <Input
+                      placeholder="紹介者のユーザーID"
+                      {...field}
+                      className="bg-zinc-800 border-zinc-700 text-white"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -192,11 +206,11 @@ export default function RegisterPage() {
               name="usdtAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>USDTアドレス（BEP20）</FormLabel>
+                  <FormLabel className="text-zinc-300">USDTアドレス（BEP20）</FormLabel>
                   <FormControl>
-                    <Input placeholder="0x..." {...field} />
+                    <Input placeholder="0x..." {...field} className="bg-zinc-800 border-zinc-700 text-white" />
                   </FormControl>
-                  <FormDescription>任意</FormDescription>
+                  <FormDescription className="text-zinc-500">任意</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -207,7 +221,7 @@ export default function RegisterPage() {
               name="walletType"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>ウォレットタイプ</FormLabel>
+                  <FormLabel className="text-zinc-300">ウォレットタイプ</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -218,31 +232,35 @@ export default function RegisterPage() {
                         <FormControl>
                           <RadioGroupItem value="evo" />
                         </FormControl>
-                        <FormLabel className="font-normal">EVOカード</FormLabel>
+                        <FormLabel className="font-normal text-zinc-300">EVOカード</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="other" />
                         </FormControl>
-                        <FormLabel className="font-normal">その他</FormLabel>
+                        <FormLabel className="font-normal text-zinc-300">その他</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
-                  <FormDescription>任意</FormDescription>
+                  <FormDescription className="text-zinc-500">任意</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full mt-6 py-6 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg"
+              disabled={isLoading}
+            >
               {isLoading ? "登録中..." : "登録する"}
             </Button>
           </form>
         </Form>
 
-        <p className="px-8 text-center text-sm text-muted-foreground">
+        <p className="px-8 text-center text-sm text-zinc-400">
           すでにアカウントをお持ちですか？{" "}
-          <Link href="/login" className="underline underline-offset-4 hover:text-primary">
+          <Link href="/login" className="underline underline-offset-4 hover:text-primary text-zinc-300">
             ログイン
           </Link>
         </p>
