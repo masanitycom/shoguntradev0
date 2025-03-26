@@ -1,0 +1,14 @@
+{
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/next",
+            "config": {
+                "installCommand": "pnpm install --no-optional"
+            }
+        }
+    ],
+    "env": {
+        "NODE_OPTIONS": "--max_old_space_size=4096"
+    }
+}
