@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { userQueries } from "@/lib/database"
-import bcrypt from "bcrypt"
+import * as bcrypt from 'bcryptjs';
 import { cookies } from "next/headers"
 import { sign } from "jsonwebtoken"
 
