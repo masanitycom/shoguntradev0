@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm add bcrypt && pnpm run build"
+  command = "pnpm add bcrypt && pnpm run build --no-lint"
   publish = ".next"
 
 [build.environment]

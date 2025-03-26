@@ -1,9 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { mlmQueries } from "@/lib/database"
 
-export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
+// 正しい型定義を使用
+type Params = { params: { userId: string } }
+
+export async function GET(request: NextRequest, context: Params) {
   try {
-    const userId = params.userId
+    const userId = context.params.userId
 
     if (!userId) {
       return NextResponse.json({ success: false, message: "ユーザーIDが指定されていません" }, { status: 400 })
@@ -21,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { userId: 
     } else {
       return NextResponse.json(
         { success: false, message: "ランク情報の取得に失敗しました", error: result.error },
-        { status: 500 },
+        { status: 500 }
       )
     }
   } catch (error) {
@@ -29,4 +32,3 @@ export async function GET(request: NextRequest, { params }: { params: { userId: 
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })
   }
 }
-
