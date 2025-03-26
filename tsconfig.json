@@ -38,6 +38,7 @@
     "node_modules",
     "app/api/**/*",
     ".next",
-    "out"
+    "out",
+    "lib/database.ts"
   ]
 }
