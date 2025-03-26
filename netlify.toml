@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm add bcrypt && pnpm run build-no-check"
+  command = "pnpm add bcrypt && NEXT_SKIP_TYPECHECKING=1 pnpm run build-no-check"
   publish = ".next"
 
 [build.environment]
