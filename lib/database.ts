@@ -71,7 +71,7 @@ export const rewardQueries = {
     return { success: true, amount: 0, fee: 0, netAmount: 0 }
   },
 
-  // 報酬計算（管理者用）
+  // 報酬計算（管理用）
   calculateRewards: async () => {
     // 実装...
     return { success: true, processedCount: 0 }
@@ -95,7 +95,7 @@ export const mlmQueries = {
     }
   },
 
-  // MLMボーナス計算（管理者用）
+  // MLMボーナス計算（管理用）
   calculateMlmBonus: async (totalBonus: number) => {
     // 実装...
     return { success: true, ranksData: [] }
@@ -107,3 +107,5 @@ export async function initializeDatabase() {
   // 実装...
   return { success: true }
 }
+
+export default pool
