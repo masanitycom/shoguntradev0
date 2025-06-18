@@ -283,26 +283,166 @@ export const rewardQueries = {
 
 // MLM関連のクエリ
 export const mlmQueries = {
-  // ユーザーのMLMランク取得
   getUserRank: async (userId: string) => {
-    // 実装...
-    return {
-      success: true,
-      rank: "足軽",
-      stats: {
-        totalInvestment: 0,
-        maxLineInvestment: 0,
-        otherLinesInvestment: 0,
-        referralsCount: 0
+    try {
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      if (userError) throw userError
+
+      const { data: purchases, error: purchasesError } = await supabase
+        .from('nft_purchases')
+        .select('purchase_price')
+        .eq('user_id', userId)
+
+      if (purchasesError) throw purchasesError
+
+      const totalInvestment = purchases?.reduce((sum, p) => sum + p.purchase_price, 0) || 0
+
+      const { data: referrals, error: referralsError } = await supabase
+        .from('users')
+        .select('user_id')
+        .eq('referrer_id', userId)
+
+      if (referralsError) throw referralsError
+
+      const referralCount = referrals?.length || 0
+
+      const ranks = [
+        { name: "足軽", investmentRequired: 0, referralsRequired: 0 },
+        { name: "物頭", investmentRequired: 100, referralsRequired: 3 },
+        { name: "組頭", investmentRequired: 500, referralsRequired: 10 },
+        { name: "番頭", investmentRequired: 1000, referralsRequired: 25 },
+        { name: "家老", investmentRequired: 2500, referralsRequired: 50 },
+        { name: "城主", investmentRequired: 5000, referralsRequired: 100 },
+        { name: "大名", investmentRequired: 10000, referralsRequired: 200 },
+        { name: "将軍", investmentRequired: 25000, referralsRequired: 500 }
+      ]
+
+      let currentRank = ranks[0]
+      let nextRank = ranks[1]
+
+      for (let i = 0; i < ranks.length; i++) {
+        if (totalInvestment >= ranks[i].investmentRequired && referralCount >= ranks[i].referralsRequired) {
+          currentRank = ranks[i]
+          nextRank = ranks[i + 1] || null
+        } else {
+          break
+        }
       }
+
+      return {
+        success: true,
+        rank: currentRank.name,
+        investment: totalInvestment,
+        referrals: referralCount,
+        nextRankRequirement: nextRank ? {
+          rank: nextRank.name,
+          investmentRequired: nextRank.investmentRequired,
+          referralsRequired: nextRank.referralsRequired
+        } : null
+      }
+    } catch (error) {
+      console.error('Error getting user rank:', error)
+      return { success: false, error: error.message }
     }
   },
 
-  // MLMボーナス計算（管理用）
-  calculateMlmBonus: async (totalBonus: number) => {
-    // 実装...
-    return { success: true, ranksData: [] }
+  getReferralTree: async (userId: string, page: number = 1, limit: number = 20, parentId?: string) => {
+    try {
+      const targetUserId = parentId || userId
+      const offset = (page - 1) * limit
+
+      const { data: referrals, error: referralsError } = await supabase
+        .from('users')
+        .select(`
+          user_id,
+          name,
+          email,
+          created_at,
+          referrer_id
+        `)
+        .eq('referrer_id', targetUserId)
+        .range(offset, offset + limit - 1)
+        .order('created_at', { ascending: false })
+
+      if (referralsError) throw referralsError
+
+      const { count, error: countError } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('referrer_id', targetUserId)
+
+      if (countError) throw countError
+
+      const referralsWithPurchases = await Promise.all(
+        (referrals || []).map(async (referral) => {
+          const { data: purchases, error: purchasesError } = await supabase
+            .from('nft_purchases')
+            .select('purchase_price')
+            .eq('user_id', referral.user_id)
+
+          if (purchasesError) {
+            console.error('Error fetching purchases for user:', referral.user_id, purchasesError)
+          }
+
+          const totalPurchases = purchases?.reduce((sum, p) => sum + p.purchase_price, 0) || 0
+
+          const { data: childReferrals, error: childError } = await supabase
+            .from('users')
+            .select('user_id', { count: 'exact', head: true })
+            .eq('referrer_id', referral.user_id)
+
+          const childCount = childError ? 0 : (childReferrals?.length || 0)
+
+          return {
+            ...referral,
+            totalPurchases,
+            childCount,
+            hasChildren: childCount > 0
+          }
+        })
+      )
+
+      return {
+        success: true,
+        referrals: referralsWithPurchases,
+        totalCount: count || 0,
+        hasMore: (count || 0) > offset + limit
+      }
+    } catch (error) {
+      console.error('Error getting referral tree:', error)
+      return { success: false, error: error.message }
+    }
   },
+
+  calculateRewards: async (userId: string) => {
+    try {
+      const { data: rewards, error } = await supabase
+        .from('rewards')
+        .select('*')
+        .eq('user_id', userId)
+
+      if (error) throw error
+
+      const totalRewards = rewards?.reduce((sum, r) => sum + r.amount, 0) || 0
+      const claimedRewards = rewards?.filter(r => r.claimed).reduce((sum, r) => sum + r.amount, 0) || 0
+      const pendingRewards = totalRewards - claimedRewards
+
+      return {
+        success: true,
+        totalRewards,
+        pendingRewards,
+        claimedRewards
+      }
+    } catch (error) {
+      console.error('Error calculating rewards:', error)
+      return { success: false, error: error.message }
+    }
+  }
 }
 
 // データベース初期化（テーブル作成）

@@ -55,6 +55,11 @@ export function AdminSidebar() {
       icon: Package,
     },
     {
+      title: "紹介管理",
+      href: "/admin/referrals",
+      icon: Users,
+    },
+    {
       title: "システム設定",
       href: "/admin/settings",
       icon: Settings,

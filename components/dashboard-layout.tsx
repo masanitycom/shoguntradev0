@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Coins, Gift, Users, Menu } from "lucide-react"
+import { Home, Coins, Gift, Users, Menu, Settings } from "lucide-react"
 import { ShogunIcon } from "@/components/ui/shogun-icon"
 
 import { Button } from "@/components/ui/button"
@@ -49,6 +49,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       title: "天下統一への道",
       href: "/dashboard/mlm",
       icon: Users,
+    },
+    {
+      title: "紹介管理",
+      href: "/dashboard/referrals",
+      icon: Users,
+    },
+    {
+      title: "設定",
+      href: "/dashboard/settings",
+      icon: Settings,
     },
   ]
 
