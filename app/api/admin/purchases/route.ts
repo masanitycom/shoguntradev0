@@ -3,11 +3,8 @@ import { nftQueries } from "@/lib/database"
 import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
-export async function POST(request: Request) {
+export async function GET() {
   try {
-    const body = await request.json()
-    const { nftId } = body
-
     const cookieStore = cookies()
     const token = cookieStore.get("auth-token")
 
@@ -16,27 +13,23 @@ export async function POST(request: Request) {
     }
 
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
-    const userId = decoded.userId
-
-    // 入力検証
-    if (!nftId) {
-      return NextResponse.json({ success: false, message: "NFT IDが必要です" }, { status: 400 })
+    
+    if (decoded.role !== "admin") {
+      return NextResponse.json({ success: false, message: "管理者権限が必要です" }, { status: 403 })
     }
 
-    // NFT購入
-    const result = await nftQueries.purchaseNft(userId, nftId)
+    const result = await nftQueries.getAllPurchases()
 
     if (result.success) {
-      return NextResponse.json({ success: true, purchase: result.purchase })
+      return NextResponse.json({ success: true, purchases: result.purchases })
     } else {
       return NextResponse.json(
-        { success: false, message: result.error || "NFT購入に失敗しました" },
-        { status: 400 },
+        { success: false, message: "購入情報の取得に失敗しました", error: result.error },
+        { status: 500 },
       )
     }
   } catch (error) {
-    console.error("Error purchasing NFT:", error)
+    console.error("Error fetching purchases:", error)
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })
   }
 }
-

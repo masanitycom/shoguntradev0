@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Sword, LayoutDashboard, Users, Coins, Gift, Settings, Menu } from "lucide-react"
+import { LayoutDashboard, Users, Coins, Gift, Settings, Menu, Package } from "lucide-react"
+import { ShogunIcon } from "@/components/ui/shogun-icon"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -49,6 +50,11 @@ export function AdminSidebar() {
       icon: Gift,
     },
     {
+      title: "NFT配送管理",
+      href: "/admin/purchases",
+      icon: Package,
+    },
+    {
       title: "システム設定",
       href: "/admin/settings",
       icon: Settings,
@@ -60,7 +66,7 @@ export function AdminSidebar() {
     <div className="flex h-full flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4">
         <Link href="/admin" className="flex items-center gap-2">
-          <Sword className="h-6 w-6 text-primary" />
+          <ShogunIcon className="h-6 w-6 text-primary" />
           <span className="font-bold">SHOGUN TRADE 管理画面</span>
         </Link>
       </div>
@@ -100,7 +106,7 @@ export function AdminSidebar() {
           </SheetContent>
         </Sheet>
         <div className="flex items-center gap-2">
-          <Sword className="h-6 w-6 text-primary" />
+          <ShogunIcon className="h-6 w-6 text-primary" />
           <span className="font-bold">SHOGUN TRADE 管理画面</span>
         </div>
       </header>

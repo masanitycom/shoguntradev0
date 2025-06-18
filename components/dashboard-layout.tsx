@@ -5,7 +5,8 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Sword, Home, Coins, Gift, Users, Menu } from "lucide-react"
+import { Home, Coins, Gift, Users, Menu } from "lucide-react"
+import { ShogunIcon } from "@/components/ui/shogun-icon"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -53,10 +54,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // サイドバー
   const Sidebar = () => (
-    <div className="flex h-full flex-col gap-2 bg-black/80 backdrop-blur-sm">
+    <div className="flex h-full flex-col gap-2 bg-black/90 backdrop-blur-sm">
       <div className="flex h-14 items-center border-b border-white/10 px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Sword className="h-6 w-6 text-primary" />
+          <ShogunIcon className="h-6 w-6 text-primary" />
           <span className="font-bold text-white">SHOGUN TRADE</span>
         </Link>
       </div>
@@ -90,7 +91,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col samurai-bg">
       {/* モバイルヘッダー */}
-      <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b border-white/10 bg-black/70 backdrop-blur-sm px-4 sm:static lg:hidden">
+      <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b border-white/10 bg-black/90 backdrop-blur-sm px-4 sm:static lg:hidden">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
@@ -107,7 +108,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </SheetContent>
         </Sheet>
         <div className="flex items-center gap-2">
-          <Sword className="h-6 w-6 text-primary" />
+          <ShogunIcon className="h-6 w-6 text-primary" />
           <span className="font-bold text-white">SHOGUN TRADE</span>
         </div>
       </header>
