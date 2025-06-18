@@ -1,11 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    typescript: {
-        // !! 警告 !!
-        // 型エラーがあってもビルドを続行します
-        // 本番環境では推奨されません
-        ignoreBuildErrors: true,
-    },
+  images: {
+    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
+  output: 'standalone',
+  env: {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+    JWT_SECRET: process.env.JWT_SECRET,
+  },
 }
 
 module.exports = nextConfig

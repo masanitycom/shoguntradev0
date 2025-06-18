@@ -14,6 +14,11 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Set environment variables for build
+ENV SUPABASE_URL="https://xkgdzmxltnnclvnrpylo.supabase.co"
+ENV SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrZ2R6bXhsdG5uY2x2bnJweWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNjQ4NzAsImV4cCI6MjA2NTg0MDg3MH0.SA4YpYtRac5fpgOpRBp5_w46GbHFshqc4FufYY5KgpM"
+ENV JWT_SECRET="shogun-trade-secret"
+
 RUN npm run build
 
 FROM base AS runner
@@ -39,5 +44,10 @@ EXPOSE 3000
 
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
+
+# Set runtime environment variables
+ENV SUPABASE_URL="https://xkgdzmxltnnclvnrpylo.supabase.co"
+ENV SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrZ2R6bXhsdG5uY2x2bnJweWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNjQ4NzAsImV4cCI6MjA2NTg0MDg3MH0.SA4YpYtRac5fpgOpRBp5_w46GbHFshqc4FufYY5KgpM"
+ENV JWT_SECRET="shogun-trade-secret"
 
 CMD ["node", "server.js"]

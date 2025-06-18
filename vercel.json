@@ -1,12 +1,11 @@
 {
-    "builds": [
-        {
-            "src": "package.json",
-            "use": "@vercel/next",
-            "config": {
-                "installCommand": "npm install",
-                "buildCommand": "npm run build"
-            }
-        }
-    ]
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
+  "env": {
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_ANON_KEY": "@supabase_anon_key", 
+    "JWT_SECRET": "@jwt_secret"
+  }
 }
