@@ -5,9 +5,7 @@ primary_region = "nrt"
 
 [env]
   NODE_ENV = "production"
-  SUPABASE_URL = "https://xkgdzmxltnnclvnrpylo.supabase.co"
-  SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrZ2R6bXhsdG5uY2x2bnJweWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNjQ4NzAsImV4cCI6MjA2NTg0MDg3MH0.SA4YpYtRac5fpgOpRBp5_w46GbHFshqc4FufYY5KgpM"
-  JWT_SECRET = "shogun-trade-secret"
+  # Environment variables should be set via fly secrets
 
 [http_service]
   internal_port = 3000
