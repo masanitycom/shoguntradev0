@@ -4,6 +4,8 @@ import * as bcrypt from 'bcryptjs';
 import { cookies } from "next/headers"
 import { sign } from "jsonwebtoken"
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

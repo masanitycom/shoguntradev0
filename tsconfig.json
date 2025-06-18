@@ -36,9 +36,7 @@
   ],
   "exclude": [
     "node_modules",
-    "app/api/**/*",
     ".next",
-    "out",
-    "lib/database.ts"
+    "out"
   ]
 }

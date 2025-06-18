@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { userQueries } from "@/lib/database"
 import * as bcrypt from 'bcryptjs';
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -28,7 +30,7 @@ export async function POST(request: Request) {
     })
 
     if (result.success) {
-      return NextResponse.json({ success: true, userId: result.userId })
+      return NextResponse.json({ success: true, userId: result.user.id })
     } else {
       return NextResponse.json(
         { success: false, message: "ユーザー登録に失敗しました", error: result.error },

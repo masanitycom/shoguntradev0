@@ -3,6 +3,8 @@ import { mlmQueries } from "@/lib/database"
 import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -20,7 +22,7 @@ export async function GET(request: Request) {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const result = await mlmQueries.getReferralTree(userId, page, limit, parentId)
+    const result = await mlmQueries.getReferralTree(userId, page, limit, parentId || undefined)
 
     if (result.success) {
       return NextResponse.json({ 

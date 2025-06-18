@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { rewardQueries } from "@/lib/database"
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -36,7 +38,7 @@ export async function POST(request: Request) {
       })
     } else {
       return NextResponse.json(
-        { success: false, message: "報酬申請に失敗しました", error: result.error },
+        { success: false, message: "報酬申請に失敗しました" },
         { status: 500 },
       )
     }

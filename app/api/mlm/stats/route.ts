@@ -3,6 +3,8 @@ import { mlmQueries } from "@/lib/database"
 import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const cookieStore = cookies()

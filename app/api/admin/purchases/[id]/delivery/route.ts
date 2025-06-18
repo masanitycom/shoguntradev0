@@ -3,6 +3,8 @@ import { nftQueries } from "@/lib/database"
 import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
+export const dynamic = 'force-dynamic'
+
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
     const body = await request.json()

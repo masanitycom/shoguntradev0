@@ -91,7 +91,12 @@ export const nftQueries = {
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        if (error.code === '42P01') {
+          return { success: true, nfts: [] }
+        }
+        throw error
+      }
 
       return { success: true, nfts: data || [] }
     } catch (error) {
@@ -111,7 +116,12 @@ export const nftQueries = {
         `)
         .eq('user_id', userId)
 
-      if (error) throw error
+      if (error) {
+        if (error.code === '42P01') {
+          return { success: true, nfts: [] }
+        }
+        throw error
+      }
 
       return { success: true, nfts: data || [] }
     } catch (error) {
@@ -347,7 +357,7 @@ export const mlmQueries = {
       }
     } catch (error) {
       console.error('Error getting user rank:', error)
-      return { success: false, error: error.message }
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
     }
   },
 
@@ -415,7 +425,7 @@ export const mlmQueries = {
       }
     } catch (error) {
       console.error('Error getting referral tree:', error)
-      return { success: false, error: error.message }
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
     }
   },
 
@@ -440,7 +450,7 @@ export const mlmQueries = {
       }
     } catch (error) {
       console.error('Error calculating rewards:', error)
-      return { success: false, error: error.message }
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
     }
   }
 }
