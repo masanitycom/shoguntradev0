@@ -1,0 +1,235 @@
+
+> shogun-trade@0.1.0 build
+> next build
+
+   ▲ Next.js 14.0.3
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+(node:20990) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20997) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20970) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:21005) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20983) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20976) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:21012) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+   Generating static pages (0/42) ...
+Error fetching admin stats: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at l (/home/ubuntu/shoguntradev0/.next/server/app/api/admin/stats/route.js:1:1752)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching purchases: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/admin/purchases/route.js:1:1655)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching top referrers: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/admin/referrals/top/route.js:1:1752)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching users: ex [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at Object.e_ [as staticGenerationBailout] (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29234)
+    at i (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:34047)
+    at Object.get (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:34143)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/admin/users/route.js:1:1764)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching admin referral stats: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/admin/referrals/stats/route.js:1:1752)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching referral tree: ex [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at Object.e_ [as staticGenerationBailout] (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29234)
+    at i (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:34047)
+    at Object.get (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:34143)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/mlm/referrals/route.js:1:1667)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (10/42) 
+Error fetching user NFTs: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/user/nfts/route.js:1:1655)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching user profile: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/user/profile/route.js:1:1925)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching MLM stats: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at d (/home/ubuntu/shoguntradev0/.next/server/app/api/mlm/stats/route.js:1:1654)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error generating referral link: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at l (/home/ubuntu/shoguntradev0/.next/server/app/api/user/referral-link/route.js:1:960)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (20/42) 
+Error fetching rewards: o [Error]: Dynamic server usage: Page couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:3736)
+    at c (/home/ubuntu/shoguntradev0/.next/server/chunks/4596.js:1:1455)
+    at l (/home/ubuntu/shoguntradev0/.next/server/app/api/rewards/route.js:1:1925)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:41328
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:131:36
+    at NoopContextManager.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/home/ubuntu/shoguntradev0/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /home/ubuntu/shoguntradev0/node_modules/next/dist/server/lib/trace/tracer.js:120:103 {
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (31/42) 
+ ⚠ Entire page /register deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /register
+Error fetching NFTs: {
+  code: '42P01',
+  details: null,
+  hint: null,
+  message: 'relation "public.nfts" does not exist'
+}
+ ✓ Generating static pages (42/42) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    176 B          90.9 kB
+├ ○ /_not-found                          870 B          84.8 kB
+├ ○ /admin                               140 B          84.1 kB
+├ ○ /admin/claims                        3.52 kB        95.9 kB
+├ ○ /admin/nfts                          3.09 kB        99.6 kB
+├ ○ /admin/purchases                     3.72 kB        96.1 kB
+├ ○ /admin/referrals                     1.82 kB        97.6 kB
+├ ○ /admin/rewards                       3.84 kB        96.2 kB
+├ ○ /admin/settings                      1.55 kB        98.1 kB
+├ ○ /admin/users                         4.58 kB        96.9 kB
+├ λ /api/admin/purchases                 0 B                0 B
+├ λ /api/admin/purchases/[id]/delivery   0 B                0 B
+├ λ /api/admin/referrals/stats           0 B                0 B
+├ λ /api/admin/referrals/top             0 B                0 B
+├ λ /api/admin/rewards/calculate         0 B                0 B
+├ λ /api/admin/stats                     0 B                0 B
+├ λ /api/admin/users                     0 B                0 B
+├ λ /api/auth/login                      0 B                0 B
+├ λ /api/auth/logout                     0 B                0 B
+├ λ /api/auth/register                   0 B                0 B
+├ ○ /api/mlm/levels                      0 B                0 B
+├ λ /api/mlm/referrals                   0 B                0 B
+├ λ /api/mlm/stats                       0 B                0 B
+├ λ /api/nfts                            0 B                0 B
+├ λ /api/nfts/images                     0 B                0 B
+├ λ /api/nfts/purchase                   0 B                0 B
+├ λ /api/nfts/weekly-rewards             0 B                0 B
+├ λ /api/rewards                         0 B                0 B
+├ λ /api/rewards/claim                   0 B                0 B
+├ λ /api/user/nfts                       0 B                0 B
+├ λ /api/user/profile                    0 B                0 B
+├ λ /api/user/referral-link              0 B                0 B
+├ ○ /dashboard                           4.07 kB         114 kB
+├ ○ /dashboard/mlm                       5.86 kB         116 kB
+├ ○ /dashboard/nfts                      12.5 kB         125 kB
+├ ○ /dashboard/referrals                 13 kB           127 kB
+├ ○ /dashboard/rewards                   6.5 kB          119 kB
+├ ○ /dashboard/settings                  4.92 kB         115 kB
+├ ○ /login                               3.28 kB         127 kB
+├ ○ /logout                              826 B          84.8 kB
+└ ○ /register                            7.89 kB         133 kB
++ First Load JS shared by all            84 kB
+  ├ chunks/472-d29b0846034f156e.js       28.8 kB
+  ├ chunks/fd9d1056-e2abcab657fdf03e.js  53.3 kB
+  ├ chunks/main-app-fe8c71c2b5c823bc.js  219 B
+  └ chunks/webpack-b24d7213af0b43a4.js   1.69 kB
+
+
+○  (Static)   prerendered as static content
+λ  (Dynamic)  server-rendered on demand using Node.js
+
