@@ -8,8 +8,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-  },
-  serverExternalPackages: ['bcryptjs']
+  }
 }
 
 module.exports = nextConfig
