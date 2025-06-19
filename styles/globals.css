@@ -89,3 +89,30 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .bg-emerald-500 {
+    background-color: #10b981;
+  }
+  .bg-emerald-600 {
+    background-color: #059669;
+  }
+  .border-emerald-500 {
+    border-color: #10b981;
+  }
+  .border-emerald-600 {
+    border-color: #059669;
+  }
+  .text-emerald-400 {
+    color: #34d399;
+  }
+  .hover\:bg-emerald-500:hover {
+    background-color: #10b981;
+  }
+  .hover\:bg-emerald-600:hover {
+    background-color: #059669;
+  }
+  .hover\:text-white:hover {
+    color: #ffffff;
+  }
+}
