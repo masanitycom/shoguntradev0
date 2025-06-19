@@ -90,29 +90,28 @@ body {
   }
 }
 
-@layer utilities {
-  .bg-emerald-500 {
-    background-color: #10b981;
-  }
-  .bg-emerald-600 {
-    background-color: #059669;
-  }
-  .border-emerald-500 {
-    border-color: #10b981;
-  }
-  .border-emerald-600 {
-    border-color: #059669;
-  }
-  .text-emerald-400 {
-    color: #34d399;
-  }
-  .hover\:bg-emerald-500:hover {
-    background-color: #10b981;
-  }
-  .hover\:bg-emerald-600:hover {
-    background-color: #059669;
-  }
-  .hover\:text-white:hover {
-    color: #ffffff;
-  }
+/* Force emerald colors without @layer to ensure they're included */
+.bg-emerald-500 {
+  background-color: #10b981 !important;
+}
+.bg-emerald-600 {
+  background-color: #059669 !important;
+}
+.border-emerald-500 {
+  border-color: #10b981 !important;
+}
+.border-emerald-600 {
+  border-color: #059669 !important;
+}
+.text-emerald-400 {
+  color: #34d399 !important;
+}
+.hover\:bg-emerald-500:hover {
+  background-color: #10b981 !important;
+}
+.hover\:bg-emerald-600:hover {
+  background-color: #059669 !important;
+}
+.hover\:text-white:hover {
+  color: #ffffff !important;
 }
