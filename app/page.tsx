@@ -49,35 +49,71 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-emerald-500"></div>
+      <div style={{ minHeight: '100vh', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ 
+          animation: 'spin 1s linear infinite', 
+          borderRadius: '50%', 
+          height: '128px', 
+          width: '128px', 
+          borderBottom: '2px solid #10b981' 
+        }}></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="text-center px-4">
-        <div className="flex justify-center items-center mb-8">
-          <Sword className="h-12 w-12 text-emerald-400 mr-4" />
-          <h1 className="text-5xl font-bold">
-            <span className="text-white">SHOGUN </span>
-            <span className="text-emerald-400">TRADE</span>
+    <div style={{ minHeight: '100vh', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center', padding: '0 16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '32px' }}>
+          <Sword style={{ height: '48px', width: '48px', color: '#34d399', marginRight: '16px' }} />
+          <h1 style={{ fontSize: '48px', fontWeight: 'bold', margin: 0 }}>
+            <span style={{ color: '#ffffff' }}>SHOGUN </span>
+            <span style={{ color: '#34d399' }}>TRADE</span>
           </h1>
         </div>
-        <p className="text-xl text-gray-300 mb-12">
+        <p style={{ fontSize: '20px', color: '#d1d5db', marginBottom: '48px' }}>
           天下統一への道 - 最高の投資体験
         </p>
-        <div className="space-x-4">
+        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
             onClick={() => router.push('/register')}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
+            style={{
+              backgroundColor: '#059669',
+              color: '#ffffff',
+              padding: '16px 32px',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: '600',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#10b981'}
+            onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#059669'}
           >
             新規登録
           </button>
           <button
             onClick={() => router.push('/login')}
-            className="bg-transparent border-2 border-emerald-600 text-emerald-400 hover:bg-emerald-600 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
+            style={{
+              backgroundColor: 'transparent',
+              border: '2px solid #059669',
+              color: '#34d399',
+              padding: '16px 32px',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = '#059669';
+              (e.target as HTMLButtonElement).style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              (e.target as HTMLButtonElement).style.backgroundColor = 'transparent';
+              (e.target as HTMLButtonElement).style.color = '#34d399';
+            }}
           >
             ログイン
           </button>
