@@ -341,7 +341,6 @@ export default function AdminNFTsPage() {
 
               <div className="flex items-center space-x-2">
                 <Switch
-                  id="is_special"
                   checked={formData.is_special}
                   onCheckedChange={(checked) => setFormData({ ...formData, is_special: checked })}
                 />
@@ -350,7 +349,6 @@ export default function AdminNFTsPage() {
 
               <div className="flex items-center space-x-2">
                 <Switch
-                  id="is_active"
                   checked={formData.is_active}
                   onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
                 />

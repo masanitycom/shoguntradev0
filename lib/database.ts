@@ -1,24 +1,18 @@
-import { Pool } from "pg"
 import { supabase } from "./supabase"
-
-// Heroku PostgreSQLデータベース接続設定
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-})
 
 // データベース接続テスト
 export async function testConnection() {
   try {
-    const client = await pool.connect()
-    const result = await client.query("SELECT NOW()")
-    client.release()
-    return { success: true, timestamp: result.rows[0].now }
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('count')
+      .limit(1)
+
+    if (error) throw error
+    return { success: true, timestamp: new Date().toISOString() }
   } catch (error) {
     console.error("Database connection error:", error)
-    return { success: false, error }
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
 }
 
@@ -27,14 +21,19 @@ export const userQueries = {
   // ユーザー登録
   createUser: async (userData: any) => {
     try {
+      console.log('Creating user with data:', userData)
       const { data, error } = await supabase
-        .from('users')
+        .from('profiles')
         .insert(userData)
         .select()
         .single()
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error:', error)
+        throw error
+      }
 
+      console.log('User created successfully:', data)
       return { success: true, user: data }
     } catch (error) {
       console.error('Error creating user:', error)
@@ -45,11 +44,21 @@ export const userQueries = {
   // ユーザー認証
   authenticateUser: async (identifier: string, password: string) => {
     try {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('users')
         .select('*')
         .or(`email.eq.${identifier},user_id.eq.${identifier}`)
         .single()
+
+      if (error && error.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .or(`email.eq.${identifier},user_id.eq.${identifier}`)
+          .single()
+        data = result.data
+        error = result.error
+      }
 
       if (error || !data) {
         return { success: false, error: 'ユーザーが見つかりません' }
@@ -65,11 +74,21 @@ export const userQueries = {
   // ユーザー情報取得
   getUserById: async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single()
+
+      if (error && error.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userId)
+          .single()
+        data = result.data
+        error = result.error
+      }
 
       if (error) throw error
 
@@ -278,16 +297,77 @@ export const nftQueries = {
 
 // 報酬関連のクエリ
 export const rewardQueries = {
-  // 報酬申請
-  claimReward: async (userId: string, claimType: string, feedback = "") => {
-    // 実装...
-    return { success: true, amount: 0, fee: 0, netAmount: 0 }
+  createRewardClaim: async (claim: {
+    user_id: string;
+    week_start: string;
+    week_end: string;
+    base_reward: number;
+    referral_bonus: number;
+    total_reward: number;
+    is_claimed: boolean;
+  }) => {
+    try {
+      const { data, error } = await supabase
+        .from('weekly_rewards')
+        .insert(claim)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error creating reward claim:', error)
+      return null
+    }
+  },
+
+  getRewardClaims: async (userId?: string) => {
+    try {
+      let query = supabase.from('weekly_rewards').select('*')
+      
+      if (userId) {
+        query = query.eq('user_id', userId)
+      }
+
+      const { data, error } = await query
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.error('Error getting reward claims:', error)
+      return []
+    }
+  },
+
+  updateRewardClaim: async (id: number, updates: any) => {
+    try {
+      const { data, error } = await supabase
+        .from('weekly_rewards')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error updating reward claim:', error)
+      return null
+    }
   },
 
   // 報酬計算（管理用）
   calculateRewards: async () => {
-    // 実装...
-    return { success: true, processedCount: 0 }
+    try {
+      const { data, error } = await supabase
+        .from('weekly_rewards')
+        .select('*')
+
+      if (error) throw error
+      return { success: true, processedCount: data?.length || 0 }
+    } catch (error) {
+      console.error('Error calculating rewards:', error)
+      return { success: false, processedCount: 0 }
+    }
   },
 }
 
@@ -295,11 +375,21 @@ export const rewardQueries = {
 export const mlmQueries = {
   getUserRank: async (userId: string) => {
     try {
-      const { data: user, error: userError } = await supabase
+      let { data: user, error: userError } = await supabase
         .from('users')
         .select('*')
         .eq('user_id', userId)
         .single()
+
+      if (userError && userError.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userId)
+          .single()
+        user = result.data
+        userError = result.error
+      }
 
       if (userError) throw userError
 
@@ -322,14 +412,14 @@ export const mlmQueries = {
       const referralCount = referrals?.length || 0
 
       const ranks = [
-        { name: "足軽", investmentRequired: 0, referralsRequired: 0 },
-        { name: "物頭", investmentRequired: 100, referralsRequired: 3 },
-        { name: "組頭", investmentRequired: 500, referralsRequired: 10 },
-        { name: "番頭", investmentRequired: 1000, referralsRequired: 25 },
-        { name: "家老", investmentRequired: 2500, referralsRequired: 50 },
-        { name: "城主", investmentRequired: 5000, referralsRequired: 100 },
-        { name: "大名", investmentRequired: 10000, referralsRequired: 200 },
-        { name: "将軍", investmentRequired: 25000, referralsRequired: 500 }
+        { name: "足軽", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "武将", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "代官", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "奉行", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "老中", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "大老", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "大名", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "将軍", investmentRequired: 1000, referralsRequired: 0 }
       ]
 
       let currentRank = ranks[0]
@@ -366,7 +456,7 @@ export const mlmQueries = {
       const targetUserId = parentId || userId
       const offset = (page - 1) * limit
 
-      const { data: referrals, error: referralsError } = await supabase
+      let { data: referrals, error: referralsError } = await supabase
         .from('users')
         .select(`
           user_id,
@@ -379,12 +469,38 @@ export const mlmQueries = {
         .range(offset, offset + limit - 1)
         .order('created_at', { ascending: false })
 
+      if (referralsError && referralsError.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select(`
+            user_id,
+            name,
+            email,
+            created_at,
+            referrer_id
+          `)
+          .eq('referrer_id', targetUserId)
+          .range(offset, offset + limit - 1)
+          .order('created_at', { ascending: false })
+        referrals = result.data
+        referralsError = result.error
+      }
+
       if (referralsError) throw referralsError
 
-      const { count, error: countError } = await supabase
+      let { count, error: countError } = await supabase
         .from('users')
         .select('*', { count: 'exact', head: true })
         .eq('referrer_id', targetUserId)
+
+      if (countError && countError.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .eq('referrer_id', targetUserId)
+        count = result.count
+        countError = result.error
+      }
 
       if (countError) throw countError
 
@@ -401,10 +517,19 @@ export const mlmQueries = {
 
           const totalPurchases = purchases?.reduce((sum, p) => sum + p.purchase_price, 0) || 0
 
-          const { data: childReferrals, error: childError } = await supabase
+          let { data: childReferrals, error: childError } = await supabase
             .from('users')
             .select('user_id', { count: 'exact', head: true })
             .eq('referrer_id', referral.user_id)
+
+          if (childError && childError.code === '42P01') {
+            const result = await supabase
+              .from('profiles')
+              .select('user_id', { count: 'exact', head: true })
+              .eq('referrer_id', referral.user_id)
+            childReferrals = result.data
+            childError = result.error
+          }
 
           const childCount = childError ? 0 : (childReferrals?.length || 0)
 
@@ -460,5 +585,3 @@ export async function initializeDatabase() {
   // 実装...
   return { success: true }
 }
-
-export default pool

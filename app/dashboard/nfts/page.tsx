@@ -13,8 +13,8 @@ import { Loader2, CheckCircle } from "lucide-react"
 interface NFT {
   id: string
   name: string
-  price: number
-  daily_rate: number
+  price_usdt: number
+  daily_return_rate: number
   is_special: boolean
   is_active: boolean
   image_url: string
@@ -199,10 +199,10 @@ export default function NFTsPage() {
                               </div>
                               <div className="space-y-2">
                                 <h3 className="font-semibold">{nft.name}</h3>
-                                <p className="text-sm text-white/70">日利上限: {nft.daily_rate}%</p>
-                                <div className="text-xl font-bold text-primary">{nft.price.toLocaleString()} USDT</div>
+                                <p className="text-sm text-white/70">日利上限: {(nft.daily_return_rate * 100).toFixed(1)}%</p>
+                                <div className="text-xl font-bold text-primary">{nft.price_usdt.toLocaleString()} USDT</div>
                                 <p className="text-xs text-white/70">
-                                  最大報酬: {(nft.price * 3).toLocaleString()} USDT
+                                  最大報酬: {(nft.price_usdt * 3).toLocaleString()} USDT
                                 </p>
                               </div>
                               {selectedNft === nft.id && (

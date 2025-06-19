@@ -1,0 +1,97 @@
+
+> shogun-trade-rebuild@0.1.0 build
+> next build
+
+   ▲ Next.js 15.3.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings in 1000ms
+
+./node_modules/@supabase/realtime-js/dist/main/RealtimeClient.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@supabase/realtime-js/dist/main/RealtimeClient.js
+./node_modules/@supabase/realtime-js/dist/main/index.js
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./app/api/admin/referrals/top/route.ts
+
+ ✓ Compiled successfully in 2000ms
+   Linting and checking validity of types ...
+   Collecting page data ...
+(node:8743) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8744) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8746) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8758) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8764) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8745) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8752) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+   Generating static pages (0/24) ...
+(node:8800) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+   Generating static pages (6/24) 
+   Generating static pages (12/24) 
+   Generating static pages (18/24) 
+ ✓ Generating static pages (24/24)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    2.15 kB         140 kB
+├ ○ /_not-found                            981 B         102 kB
+├ ○ /admin                                 207 B         101 kB
+├ ○ /admin/claims                        3.43 kB         104 kB
+├ ○ /admin/nfts                          4.39 kB         105 kB
+├ ○ /admin/purchases                     3.58 kB         105 kB
+├ ○ /admin/referrals                     3.93 kB         105 kB
+├ ○ /admin/rewards                       3.44 kB         104 kB
+├ ○ /admin/settings                      3.17 kB         104 kB
+├ ○ /admin/users                         4.13 kB         105 kB
+├ ƒ /api/admin/purchases                   207 B         101 kB
+├ ƒ /api/admin/purchases/[id]/delivery     207 B         101 kB
+├ ƒ /api/admin/referrals/stats             207 B         101 kB
+├ ƒ /api/admin/referrals/top               207 B         101 kB
+├ ƒ /api/admin/rewards/calculate           207 B         101 kB
+├ ƒ /api/admin/stats                       207 B         101 kB
+├ ƒ /api/admin/users                       207 B         101 kB
+├ ƒ /api/auth/login                        207 B         101 kB
+├ ƒ /api/auth/logout                       207 B         101 kB
+├ ƒ /api/auth/register                     207 B         101 kB
+├ ƒ /api/mlm/levels                        207 B         101 kB
+├ ƒ /api/mlm/referrals                     207 B         101 kB
+├ ƒ /api/mlm/stats                         207 B         101 kB
+├ ƒ /api/nfts                              207 B         101 kB
+├ ƒ /api/nfts/images                       207 B         101 kB
+├ ƒ /api/nfts/purchase                     207 B         101 kB
+├ ƒ /api/nfts/weekly-rewards               207 B         101 kB
+├ ƒ /api/rewards                           207 B         101 kB
+├ ƒ /api/rewards/claim                     207 B         101 kB
+├ ƒ /api/user/nfts                         207 B         101 kB
+├ ƒ /api/user/profile                      207 B         101 kB
+├ ƒ /api/user/referral-link                207 B         101 kB
+├ ○ /dashboard                           3.61 kB         145 kB
+├ ○ /dashboard/mlm                       4.31 kB         146 kB
+├ ○ /dashboard/nfts                      10.7 kB         152 kB
+├ ○ /dashboard/referrals                 13.8 kB         155 kB
+├ ○ /dashboard/rewards                   5.23 kB         147 kB
+├ ○ /dashboard/settings                   4.2 kB         146 kB
+├ ○ /login                               2.39 kB         132 kB
+├ ○ /logout                                565 B         102 kB
+└ ○ /register                            3.52 kB         133 kB
++ First Load JS shared by all             101 kB
+  ├ chunks/1684-309c08a5b3aaee13.js      45.9 kB
+  ├ chunks/4bd1b696-d8ae4211d06b3677.js  53.2 kB
+  └ other shared chunks (total)          1.93 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

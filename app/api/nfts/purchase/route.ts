@@ -4,13 +4,14 @@ import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { nftId } = body
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
@@ -26,14 +27,31 @@ export async function POST(request: Request) {
     }
 
     // NFT購入
-    const result = await nftQueries.purchaseNft(userId, nftId)
+    const nftTypesResult = await nftQueries.getAllNfts()
+    if (!nftTypesResult.success) {
+      return NextResponse.json(nftTypesResult, { status: 500 })
+    }
+    const selectedNFT = nftTypesResult.nfts.find(nft => nft.id === nftId)
+    
+    if (!selectedNFT) {
+      return NextResponse.json({ success: false, message: "NFTが見つかりません" }, { status: 404 })
+    }
 
-    if (result.success) {
-      return NextResponse.json({ success: true, purchase: result.purchase })
+    const userNFTResult = await nftQueries.createNft({
+      user_id: userId,
+      nft_type_id: nftId,
+      purchase_price: selectedNFT.price_usdt,
+      purchase_date: new Date().toISOString(),
+      total_earned: 0,
+      is_active: true
+    })
+
+    if (userNFTResult.success) {
+      return NextResponse.json({ success: true, purchase: userNFTResult.nft })
     } else {
       return NextResponse.json(
-        { success: false, message: result.error || "NFT購入に失敗しました" },
-        { status: 400 },
+        { success: false, message: "NFT購入に失敗しました", error: userNFTResult.error },
+        { status: 500 }
       )
     }
   } catch (error) {

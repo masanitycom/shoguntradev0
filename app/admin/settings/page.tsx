@@ -104,7 +104,7 @@ export default function AdminSettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Switch id="maintenance-mode" checked={maintenanceMode} onCheckedChange={setMaintenanceMode} />
+              <Switch checked={maintenanceMode} onCheckedChange={setMaintenanceMode} />
               <Label htmlFor="maintenance-mode">メンテナンスモード</Label>
             </div>
 

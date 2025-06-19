@@ -10,7 +10,12 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useMobile } from "@/hooks/use-mobile"
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  sidebarOpen?: boolean
+  setSidebarOpen?: (open: boolean) => void
+}
+
+export function AdminSidebar({ sidebarOpen, setSidebarOpen }: AdminSidebarProps = {}) {
   const pathname = usePathname()
   const isMobile = useMobile()
   const [isOpen, setIsOpen] = useState(false)

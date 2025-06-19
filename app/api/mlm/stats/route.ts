@@ -4,10 +4,11 @@ import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function GET() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
@@ -17,22 +18,24 @@ export async function GET() {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const result = await mlmQueries.getUserRank(userId)
+    const userRankResult = await mlmQueries.getUserRank(userId)
+    const referralTreeResult = await mlmQueries.getReferralTree(userId)
 
-    if (result.success) {
-      return NextResponse.json({ 
-        success: true, 
-        rank: result.rank,
-        investment: result.investment,
-        referrals: result.referrals,
-        nextRankRequirement: result.nextRankRequirement
-      })
-    } else {
-      return NextResponse.json(
-        { success: false, message: "MLM統計の取得に失敗しました", error: result.error },
-        { status: 500 }
-      )
+    if (!userRankResult.success) {
+      return NextResponse.json(userRankResult, { status: 500 })
     }
+
+    if (!referralTreeResult.success) {
+      return NextResponse.json(referralTreeResult, { status: 500 })
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      rank: userRankResult.rank,
+      investment: userRankResult.investment,
+      referrals: referralTreeResult.referrals?.length || 0,
+      nextRankRequirement: userRankResult.nextRankRequirement
+    })
   } catch (error) {
     console.error("Error fetching MLM stats:", error)
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })

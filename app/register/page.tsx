@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,12 +26,12 @@ const formSchema = z.object({
     .string()
     .min(10, "電話番号を入力してください")
     .regex(/^[0-9]+$/, "ハイフンなしで入力してください"),
-  referrerId: z.string().min(1, "紹介者IDを入力してください"),
+  referrerId: z.string().optional(),
   usdtAddress: z.string().optional(),
   walletType: z.enum(["evo", "other"]).optional(),
 })
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
@@ -67,9 +67,11 @@ export default function RegisterPage() {
       if (data.success) {
         toast({
           title: "登録完了",
-          description: "アカウントが正常に作成されました。ログインしてください。",
+          description: "アカウントが正常に作成されました。ログインページに移動します。",
         })
-        router.push("/login")
+        setTimeout(() => {
+          router.push("/login")
+        }, 1500)
       } else {
         toast({
           variant: "destructive",
@@ -97,6 +99,11 @@ export default function RegisterPage() {
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-white">新規アカウント登録</h1>
           <p className="text-sm text-zinc-400">必要事項を入力して、SHOGUN TRADEを始めましょう</p>
+          {searchParams.get("ref") && (
+            <div className="mt-2 text-sm text-green-400">
+              紹介者: {searchParams.get("ref")}
+            </div>
+          )}
         </div>
 
         <Form {...form}>
@@ -267,6 +274,16 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600"></div>
+    </div>}>
+      <RegisterForm />
+    </Suspense>
   )
 }
 

@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server"
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const REGULAR_NFTS = [
   {
     id: "shogun-nft-300",
