@@ -1,24 +1,18 @@
-import { Pool } from "pg"
 import { supabase } from "./supabase"
-
-// Heroku PostgreSQLデータベース接続設定
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-})
 
 // データベース接続テスト
 export async function testConnection() {
   try {
-    const client = await pool.connect()
-    const result = await client.query("SELECT NOW()")
-    client.release()
-    return { success: true, timestamp: result.rows[0].now }
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('count')
+      .limit(1)
+
+    if (error) throw error
+    return { success: true, timestamp: new Date().toISOString() }
   } catch (error) {
     console.error("Database connection error:", error)
-    return { success: false, error }
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
 }
 
@@ -278,16 +272,77 @@ export const nftQueries = {
 
 // 報酬関連のクエリ
 export const rewardQueries = {
-  // 報酬申請
-  claimReward: async (userId: string, claimType: string, feedback = "") => {
-    // 実装...
-    return { success: true, amount: 0, fee: 0, netAmount: 0 }
+  createRewardClaim: async (claim: {
+    user_id: string;
+    week_start: string;
+    week_end: string;
+    base_reward: number;
+    referral_bonus: number;
+    total_reward: number;
+    is_claimed: boolean;
+  }) => {
+    try {
+      const { data, error } = await supabase
+        .from('weekly_rewards')
+        .insert(claim)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error creating reward claim:', error)
+      return null
+    }
+  },
+
+  getRewardClaims: async (userId?: string) => {
+    try {
+      let query = supabase.from('weekly_rewards').select('*')
+      
+      if (userId) {
+        query = query.eq('user_id', userId)
+      }
+
+      const { data, error } = await query
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.error('Error getting reward claims:', error)
+      return []
+    }
+  },
+
+  updateRewardClaim: async (id: number, updates: any) => {
+    try {
+      const { data, error } = await supabase
+        .from('weekly_rewards')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error updating reward claim:', error)
+      return null
+    }
   },
 
   // 報酬計算（管理用）
   calculateRewards: async () => {
-    // 実装...
-    return { success: true, processedCount: 0 }
+    try {
+      const { data, error } = await supabase
+        .from('weekly_rewards')
+        .select('*')
+
+      if (error) throw error
+      return { success: true, processedCount: data?.length || 0 }
+    } catch (error) {
+      console.error('Error calculating rewards:', error)
+      return { success: false, processedCount: 0 }
+    }
   },
 }
 
@@ -322,14 +377,14 @@ export const mlmQueries = {
       const referralCount = referrals?.length || 0
 
       const ranks = [
-        { name: "足軽", investmentRequired: 0, referralsRequired: 0 },
-        { name: "物頭", investmentRequired: 100, referralsRequired: 3 },
-        { name: "組頭", investmentRequired: 500, referralsRequired: 10 },
-        { name: "番頭", investmentRequired: 1000, referralsRequired: 25 },
-        { name: "家老", investmentRequired: 2500, referralsRequired: 50 },
-        { name: "城主", investmentRequired: 5000, referralsRequired: 100 },
-        { name: "大名", investmentRequired: 10000, referralsRequired: 200 },
-        { name: "将軍", investmentRequired: 25000, referralsRequired: 500 }
+        { name: "足軽", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "武将", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "代官", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "奉行", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "老中", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "大老", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "大名", investmentRequired: 1000, referralsRequired: 0 },
+        { name: "将軍", investmentRequired: 1000, referralsRequired: 0 }
       ]
 
       let currentRank = ranks[0]
@@ -460,5 +515,3 @@ export async function initializeDatabase() {
   // 実装...
   return { success: true }
 }
-
-export default pool

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { nftId } = body
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
@@ -26,14 +26,28 @@ export async function POST(request: Request) {
     }
 
     // NFT購入
-    const result = await nftQueries.purchaseNft(userId, nftId)
+    const nftTypes = await nftQueries.getAllNFTs()
+    const selectedNFT = nftTypes.find(nft => nft.id === nftId)
+    
+    if (!selectedNFT) {
+      return NextResponse.json({ success: false, message: "NFTが見つかりません" }, { status: 404 })
+    }
 
-    if (result.success) {
-      return NextResponse.json({ success: true, purchase: result.purchase })
+    const userNFT = await nftQueries.createUserNFT({
+      user_id: userId,
+      nft_type_id: nftId,
+      purchase_price: selectedNFT.price_usdt,
+      purchase_date: new Date().toISOString(),
+      total_earned: 0,
+      is_active: true
+    })
+
+    if (userNFT) {
+      return NextResponse.json({ success: true, purchase: userNFT })
     } else {
       return NextResponse.json(
-        { success: false, message: result.error || "NFT購入に失敗しました" },
-        { status: 400 },
+        { success: false, message: "NFT購入に失敗しました" },
+        { status: 500 }
       )
     }
   } catch (error) {

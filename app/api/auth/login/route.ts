@@ -22,12 +22,12 @@ export async function POST(request: Request) {
     // ユーザー認証
     const result = await userQueries.authenticateUser(identifier, "")
 
-    if (!result.success) {
+    if (!result.success || !result.user) {
       return NextResponse.json({ success: false, message: "認証に失敗しました" }, { status: 401 })
     }
 
     // パスワード検証
-    const isPasswordValid = await bcrypt.compare(password, result.user.password)
+    const isPasswordValid = await bcrypt.compare(password, result.user!.password || "")
 
     if (!isPasswordValid) {
       return NextResponse.json({ success: false, message: "パスワードが正しくありません" }, { status: 401 })
@@ -35,13 +35,14 @@ export async function POST(request: Request) {
 
     // JWTトークン生成
     const token = sign(
-      { userId: result.user.id, role: result.user.role || "user" },
+      { userId: result.user!.id, role: result.user!.role || "user" },
       process.env.JWT_SECRET || "shogun-trade-secret",
       { expiresIn: "1d" },
     )
 
     // クッキーにトークンを保存
-    cookies().set({
+    const cookieStore = await cookies()
+    cookieStore.set({
       name: "auth-token",
       value: token,
       httpOnly: true,
@@ -53,11 +54,11 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       user: {
-        id: result.user.id,
-        name: result.user.name,
-        userId: result.user.user_id,
-        email: result.user.email,
-        role: result.user.role || "user",
+        id: result.user!.id,
+        name: result.user!.name,
+        userId: result.user!.user_id || result.user!.id,
+        email: result.user!.email,
+        role: result.user!.role || "user",
       },
     })
   } catch (error) {

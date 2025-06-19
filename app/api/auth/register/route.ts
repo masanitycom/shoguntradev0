@@ -20,13 +20,13 @@ export async function POST(request: Request) {
     // ユーザー登録
     const result = await userQueries.createUser({
       name,
-      userId,
+      user_id: userId,
       email,
       password: hashedPassword,
-      phoneNumber,
-      referrerId,
-      usdtAddress,
-      walletType,
+      phone: phoneNumber,
+      referrer_id: referrerId,
+      usdt_address: usdtAddress,
+      wallet_type: walletType,
     })
 
     if (result.success) {

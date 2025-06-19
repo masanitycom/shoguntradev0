@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
@@ -17,22 +17,16 @@ export async function GET() {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const result = await mlmQueries.getUserRank(userId)
+    const referralStats = await mlmQueries.getReferralStats(userId)
+    const mlmLevels = await mlmQueries.getMLMLevels()
 
-    if (result.success) {
-      return NextResponse.json({ 
-        success: true, 
-        rank: result.rank,
-        investment: result.investment,
-        referrals: result.referrals,
-        nextRankRequirement: result.nextRankRequirement
-      })
-    } else {
-      return NextResponse.json(
-        { success: false, message: "MLM統計の取得に失敗しました", error: result.error },
-        { status: 500 }
-      )
-    }
+    return NextResponse.json({ 
+      success: true, 
+      rank: "足軽", // Default rank for now
+      investment: 0,
+      referrals: referralStats,
+      nextRankRequirement: mlmLevels[0] || null
+    })
   } catch (error) {
     console.error("Error fetching MLM stats:", error)
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })

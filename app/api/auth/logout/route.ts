@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export async function POST() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     
     cookieStore.delete("auth-token")
 

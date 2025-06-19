@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
@@ -17,16 +17,8 @@ export async function GET() {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const result = await nftQueries.getUserNfts(userId)
-
-    if (result.success) {
-      return NextResponse.json({ success: true, nfts: result.nfts })
-    } else {
-      return NextResponse.json(
-        { success: false, message: "NFT情報の取得に失敗しました", error: result.error },
-        { status: 500 },
-      )
-    }
+    const userNFTs = await nftQueries.getUserNFTs(userId)
+    return NextResponse.json({ success: true, nfts: userNFTs })
   } catch (error) {
     console.error("Error fetching user NFTs:", error)
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })

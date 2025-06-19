@@ -11,7 +11,7 @@ export async function POST() {
     if (result.success) {
       return NextResponse.json({
         success: true,
-        processedCount: result.processedCount,
+        message: result.message,
       })
     } else {
       return NextResponse.json(

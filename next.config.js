@@ -9,10 +9,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ['bcryptjs']
-  },
-
+  serverExternalPackages: ['bcryptjs']
 }
 
 module.exports = nextConfig

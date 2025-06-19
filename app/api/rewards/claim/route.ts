@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { rewardQueries } from "@/lib/database"
+import { supabase } from "@/lib/supabase"
 
 export const dynamic = 'force-dynamic'
 
@@ -27,21 +27,33 @@ export async function POST(request: Request) {
     }
 
     // 報酬申請
-    const result = await rewardQueries.claimReward(userId, claimType, feedback)
-
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        amount: result.amount,
-        fee: result.fee,
-        netAmount: result.netAmount,
+    const { data: claim, error } = await supabase
+      .from('weekly_rewards')
+      .insert({
+        user_id: userId,
+        week_start: new Date().toISOString().split('T')[0],
+        week_end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        base_reward: 0,
+        referral_bonus: 0,
+        total_reward: 0,
+        is_claimed: false
       })
-    } else {
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error creating reward claim:', error)
       return NextResponse.json(
         { success: false, message: "報酬申請に失敗しました" },
-        { status: 500 },
+        { status: 500 }
       )
     }
+
+    return NextResponse.json({
+      success: true,
+      message: "報酬申請が完了しました",
+      claimId: claim.id
+    })
   } catch (error) {
     console.error("Error claiming reward:", error)
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })

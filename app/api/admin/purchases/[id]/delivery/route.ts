@@ -11,7 +11,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const { status } = body
     const purchaseId = params.id
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
