@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #111111;
+  --card-foreground: #ffffff;
+  --primary: #dc2626;
+  --primary-foreground: #ffffff;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #ffffff;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #dc2626;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #404040;
+  --input: #262626;
+  --ring: #dc2626;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* 戦国時代風のスタイル */
+.samurai-bg {
+  background: linear-gradient(135deg, #000000 0%, #1a0000 50%, #000000 100%);
+  position: relative;
+}
+
+.samurai-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(220, 38, 38, 0.1) 0%, transparent 50%);
+  z-index: 0;
+}
+
+.samurai-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+.samurai-card {
+  background: rgba(17, 17, 17, 0.9);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.1);
+}
+
+.samurai-button {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  transition: all 0.3s ease;
+}
+
+.samurai-button:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+  transform: translateY(-1px);
+}
+
+.samurai-input {
+  background: rgba(38, 38, 38, 0.8);
+  border: 1px solid rgba(64, 64, 64, 0.8);
+  color: white;
+}
+
+.samurai-input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+}
+
+.nft-glow {
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+  }
+}
