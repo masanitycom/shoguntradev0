@@ -18,8 +18,11 @@ export async function GET() {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const userNFTs = await nftQueries.getUserNFTs(userId)
-    return NextResponse.json({ success: true, nfts: userNFTs })
+    const userNFTsResult = await nftQueries.getUserNfts(userId)
+    if (!userNFTsResult.success) {
+      return NextResponse.json(userNFTsResult, { status: 500 })
+    }
+    return NextResponse.json({ success: true, nfts: userNFTsResult.nfts })
   } catch (error) {
     console.error("Error fetching user NFTs:", error)
     return NextResponse.json({ success: false, message: "サーバーエラーが発生しました" }, { status: 500 })

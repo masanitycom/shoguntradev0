@@ -44,11 +44,21 @@ export const userQueries = {
   // ユーザー認証
   authenticateUser: async (identifier: string, password: string) => {
     try {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('users')
         .select('*')
         .or(`email.eq.${identifier},user_id.eq.${identifier}`)
         .single()
+
+      if (error && error.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .or(`email.eq.${identifier},user_id.eq.${identifier}`)
+          .single()
+        data = result.data
+        error = result.error
+      }
 
       if (error || !data) {
         return { success: false, error: 'ユーザーが見つかりません' }
@@ -64,11 +74,21 @@ export const userQueries = {
   // ユーザー情報取得
   getUserById: async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single()
+
+      if (error && error.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userId)
+          .single()
+        data = result.data
+        error = result.error
+      }
 
       if (error) throw error
 
@@ -355,11 +375,21 @@ export const rewardQueries = {
 export const mlmQueries = {
   getUserRank: async (userId: string) => {
     try {
-      const { data: user, error: userError } = await supabase
+      let { data: user, error: userError } = await supabase
         .from('users')
         .select('*')
         .eq('user_id', userId)
         .single()
+
+      if (userError && userError.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userId)
+          .single()
+        user = result.data
+        userError = result.error
+      }
 
       if (userError) throw userError
 
@@ -426,7 +456,7 @@ export const mlmQueries = {
       const targetUserId = parentId || userId
       const offset = (page - 1) * limit
 
-      const { data: referrals, error: referralsError } = await supabase
+      let { data: referrals, error: referralsError } = await supabase
         .from('users')
         .select(`
           user_id,
@@ -439,12 +469,38 @@ export const mlmQueries = {
         .range(offset, offset + limit - 1)
         .order('created_at', { ascending: false })
 
+      if (referralsError && referralsError.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select(`
+            user_id,
+            name,
+            email,
+            created_at,
+            referrer_id
+          `)
+          .eq('referrer_id', targetUserId)
+          .range(offset, offset + limit - 1)
+          .order('created_at', { ascending: false })
+        referrals = result.data
+        referralsError = result.error
+      }
+
       if (referralsError) throw referralsError
 
-      const { count, error: countError } = await supabase
+      let { count, error: countError } = await supabase
         .from('users')
         .select('*', { count: 'exact', head: true })
         .eq('referrer_id', targetUserId)
+
+      if (countError && countError.code === '42P01') {
+        const result = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .eq('referrer_id', targetUserId)
+        count = result.count
+        countError = result.error
+      }
 
       if (countError) throw countError
 
@@ -461,10 +517,19 @@ export const mlmQueries = {
 
           const totalPurchases = purchases?.reduce((sum, p) => sum + p.purchase_price, 0) || 0
 
-          const { data: childReferrals, error: childError } = await supabase
+          let { data: childReferrals, error: childError } = await supabase
             .from('users')
             .select('user_id', { count: 'exact', head: true })
             .eq('referrer_id', referral.user_id)
+
+          if (childError && childError.code === '42P01') {
+            const result = await supabase
+              .from('profiles')
+              .select('user_id', { count: 'exact', head: true })
+              .eq('referrer_id', referral.user_id)
+            childReferrals = result.data
+            childError = result.error
+          }
 
           const childCount = childError ? 0 : (childReferrals?.length || 0)
 
