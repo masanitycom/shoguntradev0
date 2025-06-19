@@ -56,68 +56,31 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen samurai-bg">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-16">
-          <div className="flex justify-center items-center mb-8">
-            <Crown className="h-16 w-16 text-red-600 mr-4" />
-            <h1 className="text-6xl font-bold text-white">
-              SHOGUN TRADE
-            </h1>
-            <Crown className="h-16 w-16 text-red-600 ml-4" />
-          </div>
-          <p className="text-2xl text-gray-300 mb-8">
-            戦国時代をテーマにしたNFTとMLMプラットフォーム
-          </p>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-            侍戦士NFTを購入し、紹介システムで収益を得る。足軽から将軍まで8段階のランクシステムで、あなたの戦国時代の冒険が始まります。
-          </p>
+    <div className="min-h-screen samurai-bg flex items-center justify-center">
+      <div className="text-center px-4">
+        <div className="flex justify-center items-center mb-8">
+          <Sword className="h-12 w-12 text-green-500 mr-4" />
+          <h1 className="text-5xl font-bold">
+            <span className="text-white">SHOGUN </span>
+            <span className="text-green-500">TRADE</span>
+          </h1>
         </div>
-
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="samurai-card rounded-lg p-8 text-center">
-            <Sword className="h-16 w-16 text-red-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">NFTシステム</h3>
-            <p className="text-gray-300">
-              通常NFT（300-100,000 USDT）と特別NFT（100-8,000 USDT）の26種類。
-              1人1枚限定で、日利最大1.0%の収益。
-            </p>
-          </div>
-
-          <div className="samurai-card rounded-lg p-8 text-center">
-            <Shield className="h-16 w-16 text-red-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">MLMシステム</h3>
-            <p className="text-gray-300">
-              足軽から将軍まで8段階のランクシステム。
-              投資額と紹介実績に応じてランクアップし、ボーナスを獲得。
-            </p>
-          </div>
-
-          <div className="samurai-card rounded-lg p-8 text-center nft-glow">
-            <Crown className="h-16 w-16 text-red-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">週間報酬</h3>
-            <p className="text-gray-300">
-              エアドロップタスクを完了して週間報酬を獲得。
-              紹介ツリーの成長に応じて追加ボーナス。
-            </p>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <div className="space-x-4">
-            <button
-              onClick={() => router.push('/login')}
-              className="samurai-button text-white px-8 py-4 rounded-lg text-lg font-semibold"
-            >
-              ログイン
-            </button>
-            <button
-              onClick={() => router.push('/register')}
-              className="bg-transparent border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
-            >
-              新規登録
-            </button>
-          </div>
+        <p className="text-xl text-gray-300 mb-12">
+          天下統一への道 - 最高の投資体験
+        </p>
+        <div className="space-x-4">
+          <button
+            onClick={() => router.push('/register')}
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
+          >
+            新規登録
+          </button>
+          <button
+            onClick={() => router.push('/login')}
+            className="bg-transparent border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
+          >
+            ログイン
+          </button>
         </div>
       </div>
     </div>
