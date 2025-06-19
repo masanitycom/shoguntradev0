@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -31,7 +31,7 @@ const formSchema = z.object({
   walletType: z.enum(["evo", "other"]).optional(),
 })
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
@@ -267,6 +267,16 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600"></div>
+    </div>}>
+      <RegisterForm />
+    </Suspense>
   )
 }
 
