@@ -21,14 +21,19 @@ export const userQueries = {
   // ユーザー登録
   createUser: async (userData: any) => {
     try {
+      console.log('Creating user with data:', userData)
       const { data, error } = await supabase
-        .from('users')
+        .from('profiles')
         .insert(userData)
         .select()
         .single()
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error:', error)
+        throw error
+      }
 
+      console.log('User created successfully:', data)
       return { success: true, user: data }
     } catch (error) {
       console.error('Error creating user:', error)
