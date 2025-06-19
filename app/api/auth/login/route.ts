@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
-import { userQueries } from "@/lib/database"
-import * as bcrypt from 'bcryptjs';
+import { supabase } from "@/lib/supabase"
 import { cookies } from "next/headers"
-import { sign } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -12,55 +11,57 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { identifier, password } = body
 
-    // 入力検証
     if (!identifier || !password) {
-      return NextResponse.json(
-        { success: false, message: "ユーザーIDまたはメールアドレスとパスワードを入力してください" },
-        { status: 400 },
-      )
+      return NextResponse.json({ success: false, message: "ユーザーIDまたはメールアドレスとパスワードを入力してください" }, { status: 400 })
     }
 
-    // ユーザー認証
-    const result = await userQueries.authenticateUser(identifier, "")
+    const isEmail = identifier.includes('@')
+    let email = identifier
 
-    if (!result.success || !result.user) {
-      return NextResponse.json({ success: false, message: "認証に失敗しました" }, { status: 401 })
+    if (!isEmail) {
+      return NextResponse.json({ success: false, message: "現在はメールアドレスでのログインのみサポートしています" }, { status: 400 })
     }
 
-    // パスワード検証
-    const isPasswordValid = await bcrypt.compare(password, result.user!.password || "")
-
-    if (!isPasswordValid) {
-      return NextResponse.json({ success: false, message: "パスワードが正しくありません" }, { status: 401 })
-    }
-
-    // JWTトークン生成
-    const token = sign(
-      { userId: result.user!.id, role: result.user!.role || "user" },
-      process.env.JWT_SECRET || "shogun-trade-secret",
-      { expiresIn: "1d" },
-    )
-
-    // クッキーにトークンを保存
-    const cookieStore = await cookies()
-    cookieStore.set({
-      name: "auth-token",
-      value: token,
-      httpOnly: true,
-      path: "/",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24, // 1日
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     })
 
-    return NextResponse.json({
-      success: true,
-      user: {
-        id: result.user!.id,
-        name: result.user!.name,
-        userId: result.user!.user_id || result.user!.id,
-        email: result.user!.email,
-        role: result.user!.role || "user",
+    if (error) {
+      return NextResponse.json({ success: false, message: "ログインに失敗しました" }, { status: 401 })
+    }
+
+    if (!data.user) {
+      return NextResponse.json({ success: false, message: "ユーザーが見つかりません" }, { status: 401 })
+    }
+
+    const token = jwt.sign(
+      { 
+        userId: data.user.id,
+        email: data.user.email,
+        role: data.user.user_metadata?.role || 'user'
       },
+      process.env.JWT_SECRET || 'shogun-trade-secret',
+      { expiresIn: '24h' }
+    )
+
+    const cookieStore = await cookies()
+    cookieStore.set("auth-token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 86400,
+    })
+
+    return NextResponse.json({ 
+      success: true, 
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        role: data.user.user_metadata?.role || 'user',
+        name: data.user.user_metadata?.name,
+        user_id: data.user.user_metadata?.user_id
+      }
     })
   } catch (error) {
     console.error("Login error:", error)

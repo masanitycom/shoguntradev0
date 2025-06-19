@@ -8,7 +8,7 @@ interface ReferralLinkProps {
   baseUrl?: string
 }
 
-function ReferralLink({ baseUrl = 'https://shogun-trade.com' }: ReferralLinkProps) {
+function ReferralLink({ baseUrl = 'https://shoguntradev0.vercel.app' }: ReferralLinkProps) {
   const [userId, setUserId] = useState<string>('')
   const [copied, setCopied] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('')

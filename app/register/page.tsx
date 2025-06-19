@@ -67,9 +67,11 @@ function RegisterForm() {
       if (data.success) {
         toast({
           title: "登録完了",
-          description: "アカウントが正常に作成されました。ログインしてください。",
+          description: "アカウントが正常に作成されました。ログインページに移動します。",
         })
-        router.push("/login")
+        setTimeout(() => {
+          router.push("/login")
+        }, 1500)
       } else {
         toast({
           variant: "destructive",
@@ -97,6 +99,11 @@ function RegisterForm() {
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-white">新規アカウント登録</h1>
           <p className="text-sm text-zinc-400">必要事項を入力して、SHOGUN TRADEを始めましょう</p>
+          {searchParams.get("ref") && (
+            <div className="mt-2 text-sm text-green-400">
+              紹介者: {searchParams.get("ref")}
+            </div>
+          )}
         </div>
 
         <Form {...form}>
