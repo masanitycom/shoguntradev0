@@ -23,17 +23,22 @@ export async function GET(request: Request) {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const referrals = await mlmQueries.getReferralTree(userId)
+    const referralsResult = await mlmQueries.getReferralTree(userId)
 
+    if (!referralsResult.success) {
+      return NextResponse.json(referralsResult, { status: 500 })
+    }
+
+    const referralsArray = referralsResult.referrals || []
     const startIndex = (page - 1) * limit
     const endIndex = startIndex + limit
-    const paginatedReferrals = referrals.slice(startIndex, endIndex)
+    const paginatedReferrals = referralsArray.slice(startIndex, endIndex)
 
     return NextResponse.json({ 
       success: true, 
       referrals: paginatedReferrals,
-      totalCount: referrals.length,
-      hasMore: endIndex < referrals.length
+      totalCount: referralsArray.length,
+      hasMore: endIndex < referralsArray.length
     })
   } catch (error) {
     console.error("Error fetching referral tree:", error)

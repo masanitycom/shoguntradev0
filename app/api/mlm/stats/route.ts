@@ -18,15 +18,23 @@ export async function GET() {
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
     const userId = decoded.userId
 
-    const referralStats = await mlmQueries.getReferralStats(userId)
-    const mlmLevels = await mlmQueries.getMLMLevels()
+    const userRankResult = await mlmQueries.getUserRank(userId)
+    const referralTreeResult = await mlmQueries.getReferralTree(userId)
+
+    if (!userRankResult.success) {
+      return NextResponse.json(userRankResult, { status: 500 })
+    }
+
+    if (!referralTreeResult.success) {
+      return NextResponse.json(referralTreeResult, { status: 500 })
+    }
 
     return NextResponse.json({ 
       success: true, 
-      rank: "足軽", // Default rank for now
-      investment: 0,
-      referrals: referralStats,
-      nextRankRequirement: mlmLevels[0] || null
+      rank: userRankResult.rank,
+      investment: userRankResult.investment,
+      referrals: referralTreeResult.referrals?.length || 0,
+      nextRankRequirement: userRankResult.nextRankRequirement
     })
   } catch (error) {
     console.error("Error fetching MLM stats:", error)

@@ -11,6 +11,17 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+)
+
 export async function POST(request: Request) {
   try {
     console.log("=== LOGIN API ROUTE START ===")
@@ -63,6 +74,50 @@ export async function POST(request: Request) {
     console.log("User authenticated successfully:", data.user.id)
     console.log("User metadata:", data.user.user_metadata)
 
+    let userData = {
+      id: data.user.id,
+      email: data.user.email,
+      name: data.user.user_metadata?.name || '',
+      user_id: data.user.user_metadata?.user_id || '',
+      role: data.user.user_metadata?.role || 'user',
+      phone: data.user.user_metadata?.phone || '',
+      usdt_address: data.user.user_metadata?.usdt_address || '',
+      wallet_type: data.user.user_metadata?.wallet_type || 'その他',
+      current_level: data.user.user_metadata?.current_level || 0,
+      total_investment: data.user.user_metadata?.total_investment || 0,
+      total_referrals: data.user.user_metadata?.total_referrals || 0,
+      direct_referrals: data.user.user_metadata?.direct_referrals || 0
+    }
+
+    try {
+      const { data: profileData, error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .select('*')
+        .eq('id', data.user.id)
+        .single()
+
+      if (!profileError && profileData) {
+        userData = {
+          ...userData,
+          name: profileData.name || userData.name,
+          user_id: profileData.user_id || userData.user_id,
+          role: profileData.role || userData.role,
+          phone: profileData.phone || userData.phone,
+          usdt_address: profileData.usdt_address || userData.usdt_address,
+          wallet_type: profileData.wallet_type || userData.wallet_type,
+          current_level: profileData.current_level || userData.current_level,
+          total_investment: profileData.total_investment || userData.total_investment,
+          total_referrals: profileData.total_referrals || userData.total_referrals,
+          direct_referrals: profileData.direct_referrals || userData.direct_referrals
+        }
+        console.log("Profile data loaded from database")
+      } else {
+        console.log("Profile not found in database, using metadata")
+      }
+    } catch (profileFetchError) {
+      console.log("Profile fetch failed, using metadata:", profileFetchError)
+    }
+
     const jwtSecret = process.env.JWT_SECRET || 'shogun-trade-secret'
     console.log("JWT Secret available:", !!jwtSecret)
 
@@ -71,7 +126,7 @@ export async function POST(request: Request) {
       { 
         userId: data.user.id,
         email: data.user.email,
-        role: data.user.user_metadata?.role || 'user'
+        role: userData.role
       },
       jwtSecret,
       { expiresIn: '24h' }
@@ -92,13 +147,7 @@ export async function POST(request: Request) {
 
     const response = NextResponse.json({ 
       success: true, 
-      user: {
-        id: data.user.id,
-        email: data.user.email,
-        role: data.user.user_metadata?.role || 'user',
-        name: data.user.user_metadata?.name,
-        user_id: data.user.user_metadata?.user_id
-      }
+      user: userData
     })
 
     console.log("=== LOGIN API ROUTE SUCCESS ===")

@@ -30,7 +30,6 @@ export async function POST(request: Request) {
     console.log("Registration attempt for:", email)
     console.log("User data:", { name, userId, phoneNumber, referrerId, usdtAddress, walletType })
 
-    // 入力検証
     if (!name || !userId || !email || !password || !phoneNumber) {
       console.log("Missing required fields")
       return NextResponse.json({ success: false, message: "必須項目が入力されていません" }, { status: 400 })
@@ -42,7 +41,21 @@ export async function POST(request: Request) {
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
-      email_confirm: true
+      email_confirm: true,
+      user_metadata: {
+        name,
+        name_kana: name,
+        user_id: userId,
+        phone: phoneNumber,
+        referrer_id: referrerId || null,
+        usdt_address: usdtAddress || null,
+        wallet_type: walletType || 'その他',
+        role: 'user',
+        current_level: 0,
+        total_investment: 0,
+        total_referrals: 0,
+        direct_referrals: 0
+      }
     })
 
     console.log("Supabase auth user creation response received")
@@ -67,27 +80,12 @@ export async function POST(request: Request) {
 
     console.log("Auth user created successfully:", authData.user.id)
 
-    const profileData = {
-      id: authData.user.id,
-      name,
-      name_kana: name,
-      user_id: userId,
-      email,
-      phone: phoneNumber,
-      referrer_id: referrerId || null,
-      usdt_address: usdtAddress || null,
-      wallet_type: walletType || 'その他',
-      role: 'user'
-    }
-
-    console.log('Profile data to insert:', JSON.stringify(profileData, null, 2))
-    console.log('Auth user created:', JSON.stringify(authData.user, null, 2))
-
-    console.log("Updating user metadata...")
-    const { data: updateResult, error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
-      authData.user.id,
-      {
-        user_metadata: {
+    try {
+      const { data: profileData, error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .insert({
+          id: authData.user.id,
+          email,
           name,
           name_kana: name,
           user_id: userId,
@@ -95,32 +93,64 @@ export async function POST(request: Request) {
           referrer_id: referrerId || null,
           usdt_address: usdtAddress || null,
           wallet_type: walletType || 'その他',
-          role: 'user'
-        }
+          role: 'user',
+          current_level: 0,
+          total_investment: 0,
+          total_referrals: 0,
+          direct_referrals: 0
+        })
+        .select()
+        .single()
+
+      if (profileError) {
+        console.log("Profile insertion failed, using metadata approach:", profileError.message)
+      } else {
+        console.log("Profile inserted successfully:", profileData)
       }
-    )
-
-    console.log("User metadata update response received")
-    console.log("- Error:", !!updateError, updateError?.message)
-    console.log("- Data:", !!updateResult)
-
-    if (updateError) {
-      console.error('User metadata update error details:', updateError)
-      console.log("Cleaning up - deleting auth user...")
-      await supabaseAdmin.auth.admin.deleteUser(authData.user.id)
-      return NextResponse.json(
-        { success: false, message: "ユーザー情報の更新に失敗しました", error: updateError.message },
-        { status: 500 }
-      )
+    } catch (profileInsertError) {
+      console.log("Profile insertion failed, continuing with metadata approach:", profileInsertError)
     }
 
-    console.log("User metadata updated successfully")
+    if (referrerId) {
+      try {
+        const { data: referrerData, error: referrerError } = await supabaseAdmin
+          .from('profiles')
+          .select('id')
+          .eq('user_id', referrerId)
+          .single()
+
+        if (!referrerError && referrerData) {
+          await supabaseAdmin
+            .from('referral_tree')
+            .insert({
+              user_id: authData.user.id,
+              referrer_id: referrerData.id,
+              level: 1
+            })
+
+          await supabaseAdmin
+            .from('profiles')
+            .update({ 
+              direct_referrals: supabaseAdmin.rpc('increment', { x: 1 }),
+              total_referrals: supabaseAdmin.rpc('increment', { x: 1 })
+            })
+            .eq('id', referrerData.id)
+        }
+      } catch (referralError) {
+        console.log("Referral tree creation failed:", referralError)
+      }
+    }
 
     console.log("=== REGISTRATION API ROUTE SUCCESS ===")
     return NextResponse.json({ 
       success: true, 
-      userId: authData.user.id,
-      message: "ユーザー登録が完了しました"
+      message: "ユーザー登録が完了しました",
+      user: {
+        id: authData.user.id,
+        email: authData.user.email,
+        name,
+        user_id: userId
+      }
     })
   } catch (error) {
     console.error("=== REGISTRATION API ROUTE ERROR ===")
