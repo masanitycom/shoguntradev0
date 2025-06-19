@@ -4,6 +4,7 @@ import { cookies } from "next/headers"
 import { verify } from "jsonwebtoken"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {

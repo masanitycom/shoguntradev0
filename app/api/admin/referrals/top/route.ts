@@ -4,6 +4,7 @@ import { verify } from "jsonwebtoken"
 import { createClient } from "@supabase/supabase-js"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
