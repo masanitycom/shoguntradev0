@@ -26,7 +26,7 @@ const formSchema = z.object({
     .string()
     .min(10, "電話番号を入力してください")
     .regex(/^[0-9]+$/, "ハイフンなしで入力してください"),
-  referrerId: z.string().min(1, "紹介者IDを入力してください"),
+  referrerId: z.string().optional(),
   usdtAddress: z.string().optional(),
   walletType: z.enum(["evo", "other"]).optional(),
 })
