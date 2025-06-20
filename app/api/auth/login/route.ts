@@ -141,6 +141,8 @@ export async function POST(request: Request) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 86400,
+      path: "/",
+      domain: process.env.NODE_ENV === "development" ? "localhost" : undefined,
     })
 
     console.log("Cookie set successfully")

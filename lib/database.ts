@@ -198,18 +198,75 @@ export const nftQueries = {
 
   getAllPurchases: async () => {
     try {
-      const { data, error } = await supabase
-        .from('nft_purchases')
-        .select(`
-          *,
-          nfts (*),
-          users (name, user_id, email)
-        `)
+      console.log('🔍 Fetching all purchases from user_nfts table...')
+      
+      const { data: purchases, error } = await supabase
+        .from('user_nfts')
+        .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      console.log('📊 Raw purchases query result:', { purchases, error })
 
-      return { success: true, purchases: data || [] }
+      if (error) {
+        console.error('❌ Error fetching purchases:', error)
+        throw error
+      }
+
+      if (!purchases || purchases.length === 0) {
+        console.log('⚠️ No purchases found in database')
+        
+        const { count, error: countError } = await supabase
+          .from('user_nfts')
+          .select('*', { count: 'exact', head: true })
+        
+        console.log('🔢 Total records in user_nfts:', count, countError)
+        
+        return { success: true, purchases: [] }
+      }
+
+      console.log(`✅ Found ${purchases.length} purchases, fetching related data...`)
+
+      const purchasesWithDetails = await Promise.all(
+        purchases.map(async (purchase) => {
+          console.log('🔍 Processing purchase:', purchase.id)
+          
+          const { data: nftType, error: nftError } = await supabase
+            .from('nft_types')
+            .select('*')
+            .eq('id', purchase.nft_type_id)
+            .single()
+
+          console.log('🎨 NFT type data:', { nftType, nftError })
+
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('name, user_id, email')
+            .eq('id', purchase.user_id)
+            .single()
+
+          console.log('👤 Profile data:', { profile, profileError })
+
+          return {
+            id: purchase.id,
+            user_id: purchase.user_id,
+            user_name: profile?.name || profile?.email || 'Unknown User',
+            user_email: profile?.email || '',
+            nft_type_id: purchase.nft_type_id,
+            nft_name: nftType?.name || `SHOGUN NFT ${purchase.purchase_price}`,
+            nft_price: nftType?.price_usdt || purchase.purchase_price,
+            purchase_price: purchase.purchase_price,
+            status: 'pending',
+            delivery_status: purchase.is_delivered ? 'delivered' : 'pending',
+            created_at: purchase.created_at,
+            updated_at: purchase.updated_at,
+            nft_types: nftType,
+            profiles: profile
+          }
+        })
+      )
+
+      console.log('✅ Purchases with details:', purchasesWithDetails)
+      return { success: true, purchases: purchasesWithDetails }
     } catch (error) {
       console.error('Error fetching purchases:', error)
       return { success: false, error, purchases: [] }
@@ -219,7 +276,7 @@ export const nftQueries = {
   updateDeliveryStatus: async (purchaseId: string, status: string) => {
     try {
       const updateData: any = {
-        delivery_status: status,
+        is_delivered: status === 'delivered',
         updated_at: new Date().toISOString()
       }
 
@@ -228,7 +285,7 @@ export const nftQueries = {
       }
 
       const { data, error } = await supabase
-        .from('nft_purchases')
+        .from('user_nfts')
         .update(updateData)
         .eq('id', purchaseId)
         .select()

@@ -196,7 +196,7 @@ export default function NFTsPage() {
                               htmlFor={nft.id}
                               className="cursor-pointer block border border-white/20 rounded-lg p-4 hover:border-primary/50 transition-colors"
                             >
-                              <RadioGroupItem value={nft.id} id={nft.id} className="sr-only" />
+                              <RadioGroupItem value={nft.id} id={nft.id} className="absolute top-2 left-2" />
                               <div className="aspect-square w-full overflow-hidden rounded-lg bg-white/10 mb-4">
                                 <Image
                                   src={nft.image_url || "/placeholder.svg?height=200&width=200"}

@@ -43,82 +43,93 @@ function getNFTDatabaseId(nftId: string): number | null {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("=== NFT PURCHASE API START ===")
     const cookieStore = await cookies()
     const token = cookieStore.get("auth-token")
 
     if (!token) {
+      console.log("No auth token found")
       return NextResponse.json({ success: false, message: "認証が必要です" }, { status: 401 })
     }
 
     const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-jwt-secret-key") as any
     const userId = decoded.userId
+    console.log("User ID from JWT:", userId)
 
     const { nftId } = await request.json()
+    console.log("NFT ID from request:", nftId)
 
     if (!nftId) {
-      return NextResponse.json(
-        { success: false, error: 'NFT ID is required' },
-        { status: 400 }
-      )
+      console.log("Missing NFT ID")
+      return NextResponse.json({ success: false, message: 'NFT IDが必要です' }, { status: 400 })
     }
 
     const nft = getNFTById(nftId)
+    console.log("NFT from system:", nft)
     if (!nft) {
-      return NextResponse.json(
-        { success: false, error: 'NFT not found' },
-        { status: 404 }
-      )
+      console.log("NFT not found in system")
+      return NextResponse.json({ success: false, message: 'NFTが見つかりません' }, { status: 404 })
     }
 
     const databaseNftId = getNFTDatabaseId(nftId)
+    console.log("Database NFT ID mapping:", databaseNftId)
     if (!databaseNftId) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid NFT ID mapping' },
-        { status: 400 }
-      )
+      console.log("Invalid NFT ID mapping")
+      return NextResponse.json({ success: false, message: 'NFT IDマッピングが無効です' }, { status: 400 })
     }
 
-    const { data: existingPurchase } = await supabaseAdmin
+    console.log("Checking for existing user NFTs...")
+    const { data: existingPurchases, error: existingError } = await supabaseAdmin
       .from('user_nfts')
       .select('id')
       .eq('user_id', userId)
-      .single()
 
-    if (existingPurchase) {
-      return NextResponse.json(
-        { success: false, error: 'User already owns an NFT' },
-        { status: 400 }
-      )
+    console.log("Existing NFTs check:", { count: existingPurchases?.length || 0, error: existingError?.message })
+
+    if (existingError) {
+      console.error('Error checking existing NFTs:', existingError)
+      return NextResponse.json({ success: false, message: "既存のNFTチェックに失敗しました" }, { status: 500 })
     }
 
-    const { data: purchase, error } = await supabaseAdmin
+    if (existingPurchases && existingPurchases.length > 0) {
+      console.log("User already owns an NFT")
+      return NextResponse.json({ success: false, message: 'すでにNFTを所有しています（1人1枚まで）' }, { status: 400 })
+    }
+
+    console.log("Creating user NFT purchase record...")
+    const { data: purchase, error: purchaseError } = await supabaseAdmin
       .from('user_nfts')
       .insert({
         user_id: userId,
         nft_type_id: databaseNftId,
-        purchase_price: nft.price
+        purchase_price: nft.price,
+        is_delivered: false
       })
       .select()
       .single()
 
-    if (error) {
-      console.error('Error creating NFT purchase:', error)
-      return NextResponse.json(
-        { success: false, error: 'Failed to create purchase' },
-        { status: 500 }
-      )
+    console.log("Purchase creation result:", { success: !!purchase, error: purchaseError?.message })
+
+    if (purchaseError) {
+      console.error('Error creating NFT purchase:', purchaseError)
+      return NextResponse.json({ success: false, message: 'NFT購入の作成に失敗しました' }, { status: 500 })
     }
 
+    console.log("=== NFT PURCHASE API SUCCESS ===")
     return NextResponse.json({
       success: true,
-      purchase
+      message: 'NFT購入が完了しました。管理者が入金確認後、ウォレットにNFTを送付します。',
+      purchase: {
+        id: purchase.id,
+        nft_name: nft.name,
+        price: nft.price,
+        daily_rate: nft.dailyReturnRate * 100
+      }
     })
   } catch (error) {
+    console.error("=== NFT PURCHASE API ERROR ===")
     console.error('Error processing NFT purchase:', error)
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, message: 'サーバーエラーが発生しました' }, { status: 500 })
   }
 }
 
