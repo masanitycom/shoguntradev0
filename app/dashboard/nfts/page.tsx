@@ -36,7 +36,16 @@ export default function NFTsPage() {
         const nftData = await nftResponse.json()
 
         if (nftData.success) {
-          setNfts(nftData.nfts.filter((nft: NFT) => !nft.is_special && nft.is_active))
+          const allNfts = [...(nftData.nfts || []), ...(nftData.specialNfts || [])]
+          setNfts(allNfts.map((nft: any) => ({
+            id: nft.id,
+            name: nft.name,
+            price_usdt: nft.price,
+            daily_return_rate: nft.dailyReturnRate / 100,
+            is_special: nft.isSpecial,
+            is_active: true,
+            image_url: nft.imageUrl || "/placeholder.svg"
+          })))
         }
 
         const userNftResponse = await fetch("/api/user/nfts")
