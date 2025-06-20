@@ -64,20 +64,48 @@ export async function GET() {
       return NextResponse.json({ success: false, message: "購入情報の取得に失敗しました" }, { status: 500 })
     }
 
+    const userIds = [...new Set(purchases.map((purchase: any) => purchase.user_id).filter(Boolean))]
+    console.log("User IDs to fetch:", userIds)
+
+    let users: any[] = []
+    if (userIds.length > 0) {
+      const { data: userProfiles, error: usersError } = await supabaseAdmin
+        .from('profiles')
+        .select('id, user_id, name, email')
+        .in('id', userIds)
+      
+      console.log("User profiles query result:", { count: userProfiles?.length || 0, error: usersError?.message })
+      
+      if (usersError) {
+        console.log("User profiles query failed, using fallback data")
+        users = []
+      } else {
+        users = userProfiles || []
+      }
+    }
+
     const formattedPurchases = (purchases || []).map((purchase: any) => {
       const nftPrice = purchase.purchase_price || 300
       const nftName = `SHOGUN NFT${nftPrice}`
+      const user = users.find(u => u.id === purchase.user_id)
       
       return {
         id: purchase.id,
         user_id: purchase.user_id,
-        nft_type_id: purchase.nft_type_id,
-        nft_name: nftName,
-        price: nftPrice,
-        purchase_date: purchase.purchase_date || purchase.created_at,
+        nft_id: purchase.nft_type_id,
+        purchase_price: nftPrice,
         delivery_status: purchase.is_delivered ? 'delivered' : 'pending',
-        delivery_date: purchase.delivery_date,
-        created_at: purchase.created_at
+        delivered_at: purchase.delivery_date,
+        created_at: purchase.created_at,
+        nfts: {
+          name: nftName,
+          image_url: "/placeholder.svg"
+        },
+        users: {
+          name: user?.name || `User ${purchase.user_id}`,
+          user_id: user?.user_id || `USER${purchase.user_id}`,
+          email: user?.email || `user${purchase.user_id}@example.com`
+        }
       }
     })
 
