@@ -379,14 +379,14 @@ export const mlmQueries = {
         .from('users')
         .select('*')
         .eq('user_id', userId)
-        .single()
+        .maybeSingle()
 
       if (userError && userError.code === '42P01') {
         const result = await supabase
           .from('profiles')
           .select('*')
           .eq('user_id', userId)
-          .single()
+          .maybeSingle()
         user = result.data
         userError = result.error
       }
