@@ -72,6 +72,7 @@ body.dark,
   --sidebar-ring: 217.2 91.2% 59.8% !important;
 }
 
+/* Force rebuild - CSS deployment fix */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
