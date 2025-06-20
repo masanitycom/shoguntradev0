@@ -26,7 +26,7 @@ export async function GET() {
       return NextResponse.json({ success: false, message: "認証が必要です" }, { status: 401 })
     }
 
-    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
+    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-jwt-secret-key") as any
     const userId = decoded.userId
 
     let profileData = null
@@ -85,7 +85,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: false, message: "認証が必要です" }, { status: 401 })
     }
 
-    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
+    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-jwt-secret-key") as any
     const userId = decoded.userId
 
     const body = await request.json()

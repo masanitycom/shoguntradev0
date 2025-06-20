@@ -118,7 +118,7 @@ export async function POST(request: Request) {
       console.log("Profile fetch failed, using metadata:", profileFetchError)
     }
 
-    const jwtSecret = process.env.JWT_SECRET || 'shogun-trade-secret'
+    const jwtSecret = process.env.JWT_SECRET || 'shogun-trade-jwt-secret-key'
     console.log("JWT Secret available:", !!jwtSecret)
 
     console.log("Creating JWT token...")

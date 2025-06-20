@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: false, message: "認証が必要です" }, { status: 401 })
     }
 
-    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
+    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-jwt-secret-key") as any
     const userId = decoded.userId
 
     const referralsResult = await mlmQueries.getReferralTree(userId)

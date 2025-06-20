@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: "認証が必要です" }, { status: 401 })
     }
 
-    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-secret") as any
+    const decoded = verify(token.value, process.env.JWT_SECRET || "shogun-trade-jwt-secret-key") as any
     
     if (decoded.role !== 'admin') {
       return NextResponse.json({ success: false, message: "管理者権限が必要です" }, { status: 403 })
