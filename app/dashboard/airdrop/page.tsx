@@ -193,7 +193,7 @@ export default function AirdropPage() {
                               setSelectedAnswers(prev => ({ ...prev, [task.id]: parseInt(value) }))
                             }
                           >
-                            {task.choices.map((choice, index) => (
+                            {(task.choices || []).map((choice, index) => (
                               <div key={index} className="flex items-center space-x-2">
                                 <RadioGroupItem value={index.toString()} id={`task-${task.id}-choice-${index}`} />
                                 <Label htmlFor={`task-${task.id}-choice-${index}`} className="text-zinc-300">{choice}</Label>
